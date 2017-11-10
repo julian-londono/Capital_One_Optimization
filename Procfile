@@ -1,1 +1,1 @@
-web: gunicorn capital_one_site.wsgi --log-file -
+web: gunicorn capital_one_site.wsgi --timeout 90 --keep-alive 5 --log-file debug
