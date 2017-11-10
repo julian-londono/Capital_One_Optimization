@@ -9,7 +9,7 @@ from .models import Neighborhoods, Listing
 # Create your views here.
 
 def index(request):
-    import_data()
+    # import_data()
     listings = Listing.objects.all()
     data1 = listings[:1]
     data = serializers.serialize("json", listings)
