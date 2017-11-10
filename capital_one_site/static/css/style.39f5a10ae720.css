@@ -1,0 +1,95 @@
+html, body, .row {
+  height: 100%;
+  margin: 0;
+  /*padding: 0;*/
+}
+
+h2 {
+  /*font-family: -apple-system, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";*/
+}
+
+#floating-panel {
+  position: absolute;
+  top: 10px;
+  left: 25%;
+  z-index: 5;
+  background-color: #fff;
+  padding: 5px;
+  border: 1px solid #999;
+  text-align: center;
+  font-family: 'Roboto','sans-serif';
+  line-height: 30px;
+  padding-left: 10px;
+}
+#floating-panel {
+  background-color: #fff;
+  border: 1px solid #999;
+  left: 25%;
+  padding: 5px;
+  position: absolute;
+  top: 10px;
+  z-index: 5;
+}
+
+.jumbotron{
+  margin-bottom: 15px;
+  background-color: #65e2f6;
+  height: 15%;
+  padding: 0;
+  box-shadow: 0 13px 38px rgba(0,0,0,0.30), 0 12px 12px rgba(0,0,0,0.22);
+}
+.title-row{
+  height: 55px;
+  margin: 8px 0;
+}
+
+.side-text{
+  height: 100%;
+  align-items: center;
+  display: flex;
+}
+
+.card-container{
+  box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
+}
+.map-row{
+  height: 60%;
+}
+
+.map-card{
+  height: 80%;
+}
+
+.map-text{
+  height: 20%;
+}
+
+.input-margins{
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.transition{
+  transition: all 2s;
+}
+
+.selector-margin{
+  margin: 19px 0;
+}
+
+.button-margin{
+  margin: 15px 0;
+}
+
+.bottom-margin{
+  margin-bottom: 15px;
+}
+
+.chart-container{
+  height: 390px !important;
+  position: relative;
+}
+
+.chart-div-size{
+  height: 390px !important;
+}
