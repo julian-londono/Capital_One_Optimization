@@ -11,4 +11,8 @@ Web app created for a Capital One Code Challenge based on AirBnb Data in San Fra
 
 `pip install -r requirements.txt`
 
+**To populate database with place listings data set:**
+
+Uncomment import statements found in `main/view.py`, load page **once** then comment them again and continue running 
+
 **Run:** `python manage.py runserver`
