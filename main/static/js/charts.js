@@ -1,4 +1,30 @@
-window.onload = function () { loadAll() }
+// When user scrolls to charts, charts render with animation
+// This was used directly from a StackOverFlow.com solution:
+// https://stackoverflow.com/questions/18772547/how-to-make-the-chart-js-animate-when-scrolled-to-that-section
+var inView = false;
+
+function isScrolledIntoView(elem)
+{
+    var docViewTop = $(window).scrollTop();
+    var docViewBottom = docViewTop + $(window).height();
+
+    var elemTop = $(elem).offset().top;
+    var elemBottom = elemTop + $(elem).height();
+
+    return ((elemTop <= docViewBottom) && (elemBottom >= docViewTop));
+}
+
+$(window).scroll(function() {
+    if (isScrolledIntoView('#barGraph1')) {
+        if (inView) { return; }
+        inView = true;
+        loadAll();
+    } else {
+        inView = false;
+    }
+});
+
+// window.onload = function () { loadAll() }
 var today = moment();
 var neighborhoodArray = ["Golden Gate Park","Noe Valley","Castro/Upper Market","Glen Park","Outer Sunset","Outer Mission","Mission","Bernal Heights","Presidio Heights","Visitacion Valley","Marina","Diamond Heights","Parkside","North Beach","Ocean View","Haight Ashbury","Excelsior","Potrero Hill","Twin Peaks","West of Twin Peaks","Inner Richmond","Seacliff","Western Addition","Outer Richmond","Nob Hill","Crocker Amazon","Inner Sunset","Financial District","Russian Hill","Pacific Heights","Bayview","Chinatown","South of Market","Treasure Island/YBI","Lakeshore","Downtown/Civic Center","Presidio"];
 
@@ -8,10 +34,11 @@ var borderColorArray = ['rgba(255,99,132,1)','rgba(54, 162, 235, 1)','rgba(255, 
 
 var responseTimeArray = ["Within An Hour", "Within A Few Hours", "Within A Day"];
 
+// Renders all chart elements
 function loadAll(){
-  var bar1 = document.getElementById("myChart1").getContext('2d');
-  var bar2 = document.getElementById("myChart2").getContext('2d');
-  var scatter1 = document.getElementById("myChart3").getContext('2d');
+  var bar1 = document.getElementById("barGraph1").getContext('2d');
+  var bar2 = document.getElementById("barGraph2").getContext('2d');
+  var scatter1 = document.getElementById("scatterPlot1").getContext('2d');
   Chart.defaults.global.defaultColor = 'rgba(217, 0, 65,1)';
   var scatterChart = new Chart(scatter1, {
     responsive: true,
@@ -19,8 +46,10 @@ function loadAll(){
     type: 'scatter',
     data: {
         datasets: [{
+            // The following line was used during development to call a series of function that return the data used to populate this chart
+            // This data was saved in various arrays in chart_data.js for production to decrease loading time
             // data: getPointsForHostSince(),
-            data: scatter1Data,
+            data: scatter1Data, //Loads data array from chart_data.js
             backgroundColor: "rgba(217, 0, 65,1)"
         }]
     },
@@ -32,7 +61,7 @@ function loadAll(){
                 position: 'bottom',
                 scaleLabel: {
                   display: true,
-                  labelString: 'Days as AirBnb Host',
+                  labelString: 'Days as AirBnB Host',
                   fontSize: 15
                 }
             }],
@@ -60,8 +89,10 @@ function loadAll(){
     data: {
         labels: neighborhoodArray,
         datasets: [{
+            // The following line was used during development to call a series of function that return the data used to populate this chart
+            // This data was saved in various arrays in chart_data.js for production to decrease loading time
             // data: getPointsForLocationScore(),
-            data: bar1Data,
+            data: bar1Data, //Loads data array from chart_data.js
             backgroundColor: backgroundColorArray,
             borderColor: borderColorArray,
             borderWidth: 1
@@ -103,8 +134,10 @@ function loadAll(){
     data: {
         labels: responseTimeArray,
         datasets: [{
+            // The following line was used during development to call a series of function that return the data used to populate this chart
+            // This data was saved in various arrays in chart_data.js for production to decrease loading time
             // data: getPointsForResponseTimeCorrelation(),
-            data: bar2Data,
+            data: bar2Data, //Loads data array from chart_data.js
             backgroundColor: backgroundColorArray,
             borderColor: borderColorArray,
             borderWidth: 1
@@ -142,28 +175,30 @@ function loadAll(){
   });
 }
 
-
-
+// Returns data array for scatter plot of "days as host" vs "average scrore"
 function getPointsForHostSince(){
   var pointArray = [];
+  // Loops through data points, separating them by cohorts of 25 days, averaging the score for each cohort
   for (low = 0, high = 25; high <3000; low+=25, high+=25){
     var pointsInCohort = [];
     for (let p of data){
       var host_since = p.fields.host_since;
       var score = p.fields.score_overall;
+      // Uses Moment.JS to find how many days since the host started being an AirBnB Host
       var daysAsHost = today.diff(host_since, 'days');
       if (daysAsHost<3000 && daysAsHost>=low && daysAsHost<=high){
         pointsInCohort.push({daysAsHost, score});
       }
     }
+    // Returns array with average score for given cohort
     pointArray.push(compileHostSincePoints(pointsInCohort));
   }
-  console.log(JSON.stringify(pointArray));
   return pointArray;
 }
 
 function getPointsForResponseTimeCorrelation(){
   var pointArray = [];
+  // Loops through data points, separating them by cohorts based "response time", averaging the score for each cohort
   for (i = 0; i <responseTimeArray.length; i++){
     var pointsInCohort = [];
     for (let p of data){
@@ -172,6 +207,7 @@ function getPointsForResponseTimeCorrelation(){
       if ((responseTime).toString() == "within an hour") {responseTime = "Within An Hour";}
       if ((responseTime).toString() == "within a few hours") {responseTime = "Within A Few Hours";}
       if ((responseTime).toString() == "within a day") {responseTime = "Within A Day";}
+      // Excludes "N/A" response time, adds points
       if (responseTime != 'N/A' &&responseTime == responseTimeArray[i]){
         pointsInCohort.push({responseTime, score});
       }
@@ -181,12 +217,13 @@ function getPointsForResponseTimeCorrelation(){
     }
 
   }
-  console.log(JSON.stringify(pointArray));
   return pointArray;
 }
 
+// Returns data array for bar graph of "locations" and their "average location scrore"
 function getPointsForLocationScore(){
   var pointArray = [];
+  // Loops through data points, separating them by cohorts based "neighborhood", averaging the score for each cohort
   for (i=0; i<neighborhoodArray.length; i++){
     var pointsInCohort = [];
     for (let p of data){
@@ -196,15 +233,16 @@ function getPointsForLocationScore(){
         pointsInCohort.push({neighborhood, score});
       }
     }
+    // Returns array with average score for given cohort
     pointArray.push(compileLocationPoints(pointsInCohort));
   }
   pointArray.sort(function(a, b) {
     return parseFloat(b.y) - parseFloat(a.y);
   });
-  console.log(JSON.stringify(pointArray));
   return pointArray;
 }
 
+// Returns array with average score for given location cohort
 function compileLocationPoints(points){
   var neighborhoodName = points[0].neighborhood;
   var averageScoreArray = [];
@@ -215,6 +253,7 @@ function compileLocationPoints(points){
   return {x:neighborhoodName,y:averageScore};
 }
 
+// Returns array with average score for given response time cohort
 function compileResponseRatePoints(points){
   var responseTime = points[0].responseTime;
   var averageScoreArray = [];
@@ -225,6 +264,7 @@ function compileResponseRatePoints(points){
   return {x:responseTime,y:averageScore};
 }
 
+// Returns array with average score for given "days as host" cohort
 function compileHostSincePoints(points){
   var maxDaysInCohort = 0;
   var averageScoreArray = [];
@@ -236,6 +276,7 @@ function compileHostSincePoints(points){
   return {x:maxDaysInCohort,y:averageScore};
 }
 
+// Returns the average value of a given array
 function averageArray(e){
   total = 0;
   for (let point of e){

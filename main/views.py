@@ -9,13 +9,18 @@ from .models import Neighborhoods, Listing
 # Create your views here.
 
 def index(request):
-    # import_data()
+    # Uncomment the following two lines and load the page *only once* to populate the database
+    # with neighborhood and listing data from the given CSV files
+    # import_listing_data()
+    # import_neighborhood_data()
+
     listings = Listing.objects.all()
-    data1 = listings[:1]
+    # Passes the database data along to JavaScript files via JSON
     data = serializers.serialize("json", listings)
     return render(request, 'main.html', {'listing': data})
 
-def import_data():
+# Imports listings data from listing.csv into the SQLite Database
+def import_listing_data():
     my_path = os.path.abspath(os.path.dirname(__file__))
     path = os.path.join(my_path, "csvs/listings.csv")
     print (path)
@@ -59,6 +64,7 @@ def import_data():
         model.score_location = score2
         model.save()
 
+# Ultimately unused function that returns the number of AirBnB listings for a given neighborhood
 def numPlaces(neighborhood):
     if (neighborhood=='Bayview'): return 118
     if (neighborhood=='Bernal Heights'): return 451
@@ -100,13 +106,13 @@ def numPlaces(neighborhood):
     if (neighborhood==''): return 1
     return 1
 
-
-# def import_data():
-#     my_path = os.path.abspath(os.path.dirname(__file__))
-#     path = os.path.join(my_path, "csvs/neighbourhoods.csv")
-#     print (path)
-#     dataReader = csv.reader(open(path), delimiter=',', quotechar='"')
-#     for row in dataReader:
-#         model = Neighborhoods()
-#         model.name = row[0]
-#         model.save()
+# Imports neighborhood data from neighbourhoods.csv into the SQLite Database
+def import_neighborhood_data():
+    my_path = os.path.abspath(os.path.dirname(__file__))
+    path = os.path.join(my_path, "csvs/neighbourhoods.csv")
+    print (path)
+    dataReader = csv.reader(open(path), delimiter=',', quotechar='"')
+    for row in dataReader:
+        model = Neighborhoods()
+        model.name = row[0]
+        model.save()

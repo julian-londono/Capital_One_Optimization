@@ -1,11 +1,8 @@
 html, body, .row {
   height: 100%;
   margin: 0;
+  background-color: #e8edf3;
   /*padding: 0;*/
-}
-
-h2 {
-  /*font-family: -apple-system, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";*/
 }
 
 #floating-panel {
@@ -34,19 +31,22 @@ h2 {
 .jumbotron{
   margin-bottom: 15px;
   background-color: #65e2f6;
-  height: 15%;
+  height: 150px;
   padding: 0;
   box-shadow: 0 13px 38px rgba(0,0,0,0.30), 0 12px 12px rgba(0,0,0,0.22);
+  background-color: #a2ccff;
 }
 .title-row{
   height: 55px;
-  margin: 8px 0;
+  margin: 45px 0;
 }
 
 .side-text{
   height: 100%;
   align-items: center;
-  display: flex;
+  align-content: center;
+  display: grid;
+  /*display: inline-flex*/
 }
 
 .card-container{
@@ -88,6 +88,7 @@ h2 {
 .chart-container{
   height: 390px !important;
   position: relative;
+  background-color: #eaf3f6
 }
 
 .chart-div-size{

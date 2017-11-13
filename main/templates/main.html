@@ -6,18 +6,19 @@
   <meta charset="utf-8">
   <title>AirBnB Optimization</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
-
   <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css">
-
+  <!-- Bootstrap JS Files -->
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+  <!-- Chart.js Files -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.1/moment.js"></script>
-  <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script> -->
+  <!-- Bootrsap Select Files -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
   <script>
+    // Passes along data from Django SQLite DB to JavaScript files
     var data = {{listing | safe}}
   </script>
   <script type="text/javascript" src="{% static 'js/chart_data.js' %}"></script>
@@ -26,20 +27,14 @@
 </head>
 
 <body>
+  <!-- Bootstrap jumbotron header -->
   <div class="jumbotron jumbotron-fluid">
     <div class="container">
-      <h1 class="display-3">AirBnB Optimization</h1>
-      <p class="lead">Using data to optimize your hosting!</p>
+      <h1 class="display-3">AirBnB Optimizer</h1>
+      <p class="lead">Maximize Your AirBnB Hosting Revenue with Data Analyis!</p>
     </div>
   </div>
-
-  <!-- <div id="floating-panel">
-    <button onclick="toggleHeatmap()">Toggle Heatmap</button>
-    <button onclick="changeGradient()">Change gradient</button>
-    <button onclick="changeRadius()">Change radius</button>
-    <button onclick="changeOpacity()">Change opacity</button>
-  </div> -->
-
+  <!-- Welcome text, instructions, and Lat Long inputs -->
   <div class="container-fluid bottom-margin">
     <div class="row text-center card-container">
       <div class="row">
@@ -47,7 +42,6 @@
           <h2>Welcome! Please enter a latitude and longitude <strong>or</strong> <i>drag</i> the pin around on the map below to get a price per night suggestion for your location</h2>
         </div>
       </div>
-
       <div class="row col-md-12">
         <div class="input-group input-group-lg col-md-4 input-margins">
           <input id="userLat" type="number" class="form-control" placeholder="Latitude" aria-label="Latitude" aria-describedby="sizing-addon1">
@@ -70,63 +64,77 @@
       <div class="row container-fluid input-margins">
 
         <div class="col-md-5">
-          <h3 id="priceTag" class="float-right">Sugggested Price/Night: $104.40</h3>
+          <h3 id="priceTag" class="float-right">Sugggested Price/Night: $87.11</h3>
         </div>
         <div class="col-md-7">
-          <h3 id="profitTag" class="float-left">Predicted Average Profit/Week: $730.80</h3>
+          <h3 id="revenueTag" class="float-left">Predicted Average Revenue/Week: $609.77</h3>
         </div>
       </div>
     </div>
   </div>
 
+  <!-- Price and Density Heatmaps from Google Maps JS API -->
   <div class="row">
-    <div class="col-md-6">
+    <!-- Left Side -->
+    <div class="col-md-6 mb-md-4">
+      <div class="col-md-12 map-text text-center mb-md-4 card-container side-text">
+        <div>
+          <h2 class=""><strong>AirBnB Price Heatmap</strong></h2>
+          <h3 class="">Explore San Francisco AirBnB prices with this interactive heatmap</h3>
+        </div>
+      </div>
+      <!-- Price Map gets placed here -->
       <div class="col-md-12 map-card card-container" id="map_price">
       </div>
-      <div class="col-md-12 map-text text-right">
-        <h3 class="side-text">Check out this heatmap on the right to see where there are the most AirBnb's in San Francisco!</h3>
-      </div>
     </div>
-    <div class="col-md-6">
-      <div class="col-md-12 map-text">
-        <h3 class="side-text">Explore this interactive heatmap (left) of the most expensive AirBnb's in San Francisco!</h3>
+    <!-- Right Side -->
+    <div class="col-md-6 mb-md-4">
+      <div class="col-md-12 map-text text-center mb-md-4 card-container side-text">
+        <div>
+          <h2 class=""><strong>AirBnB Location Heatmap</strong></h2>
+          <h3 class="">Checkout where there's more AirBnB hotspots</h3>
+        </div>
       </div>
+      <!-- Density Map gets placed here -->
       <div class="col-md-12 map-card card-container" id="map_density">
       </div>
     </div>
   </div>
 
   <div class="row title-row">
-      <div class="col-md-12 text-center">
-        <h1><u>Data Analysis to Help You Maximize Profit!</u></h1>
-      </div>
+    <div class="col-md-12 text-center">
+      <h1><u>Learn How to Maximize Your Host Review Score</u></h1>
+    </div>
   </div>
+  <!-- ChartJS Chart/Graph 1 -->
   <div class="row chart-div-size">
-      <div class="col-md-6">
-        <canvas id="myChart1" class="chart-container card-container"></canvas>
-      </div>
-      <div class="col-md-6">
-        <h3 class="side-text">Golden Gate Park is the most well-reviewed neighborhood by a landslide! While location is just one factor in a host's overall score, knowing where your neighborhood stands in comparison to the rest is important.  Hover over the bar graph to get more location info!</h3>
-      </div>
+    <div class="col-md-6">
+      <canvas id="barGraph1" class="chart-container card-container"></canvas>
+    </div>
+    <div class="col-md-6">
+      <h3 class="side-text">Location is an important factor when it comes to your score.  Golden Gate Park is the most well-reviewed neighborhood by a landslide! If your neightborhood tends to be reviewed relatively lower, try to offset this by providing outstanding host service!  Hover over the bar graph to get more location info!</h3>
+    </div>
   </div>
+  <!-- ChartJS Chart/Graph 2 -->
   <div class="row chart-div-size">
-      <div class="col-md-6">
-        <h3 class="side-text text-right">As seen in this graph to the right, being on top of responding your messages often leads to a higher host score! Help maximize your bookings by responding to potential lodgers quickly.</h3>
-      </div>
-      <div class="col-md-6">
-        <canvas id="myChart2" class="chart-container card-container"></canvas>
-      </div>
+    <div class="col-md-6">
+      <h3 class="side-text text-right">Fast responses are super important!  Responding to your messages within the hour is proven to help you get a higher host score.</h3>
+    </div>
+    <div class="col-md-6">
+      <canvas id="barGraph2" class="chart-container card-container"></canvas>
+    </div>
   </div>
+  <!-- ChartJS Chart/Graph 3 -->
   <div class="row chart-div-size">
-      <div class="col-md-6">
-        <canvas id="myChart3" class="chart-container card-container"></canvas>
-      </div>
-      <div class="col-md-6">
-        <h3 class="side-text">Don't have the ideal host score you'd like yet?  Don't worry! This chart suggests that as time as a host goes on, average host scores tend to improve; keep up the good hosting and you'll get that 100/100 eventually!</h3>
-      </div>
+    <div class="col-md-6">
+      <canvas id="scatterPlot1" class="chart-container card-container"></canvas>
+    </div>
+    <div class="col-md-6">
+      <h3 class="side-text">Recently started hosting and not happy with your score?  Don't worry!  This chart suggests that as time as a host goes on, average host scores tend to improve; keep up the good hosting and you'll eventually have an amazing score!</h3>
+    </div>
   </div>
 
-
+  <!-- Include Google Maps JavaScript API -->
   <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDiFQ3mhBPg8qQOHpznkrTRRlMmaBPbt_s&libraries=visualization,geometry&callback=initMap">
   </script>
 </body>

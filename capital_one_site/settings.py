@@ -29,8 +29,10 @@ STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 SECRET_KEY = '2vw!z)0-wi0jdrm!gtxwe_6(axx0j(4xc3tmc%y*$bosr3w*hz'
 
 # SECURITY WARNING: don't run with debug turned on in production!
+# Left debug true on purpose
 DEBUG = True
 
+# Allows Hosting on Heroku Server
 ALLOWED_HOSTS = ['127.0.0.1', '.herokuapp.com']
 
 
@@ -54,6 +56,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # Allows django to serve static files in production (JS, CSS, images)
     'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
