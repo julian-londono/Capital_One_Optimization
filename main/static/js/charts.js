@@ -1,7 +1,9 @@
 // When user scrolls to charts, charts render with animation
-// This was used directly from a StackOverFlow.com solution:
+// This was adapted from a StackOverFlow.com solution:
 // https://stackoverflow.com/questions/18772547/how-to-make-the-chart-js-animate-when-scrolled-to-that-section
-var inView = false;
+var inView1 = false;
+var inView2 = false;
+var inView3 = false;
 
 function isScrolledIntoView(elem)
 {
@@ -15,12 +17,20 @@ function isScrolledIntoView(elem)
 }
 
 $(window).scroll(function() {
-    if (isScrolledIntoView('#barGraph1')) {
-        if (inView) { return; }
-        inView = true;
-        loadAll();
-    } else {
-        inView = false;
+    if (isScrolledIntoView('#barGraph1') && !inView1) {
+        if (inView1) { return; }
+        inView1 = true;
+        loadBarGraph1();
+    }
+    if (isScrolledIntoView('#barGraph2')&& !inView2) {
+        if (inView2) { return; }
+        inView2 = true;
+        loadBarGraph2();
+    }
+    if (isScrolledIntoView('#scatterPlot1')&& !inView3) {
+        if (inView3) { return; }
+        inView3 = true;
+        loadScatter1();
     }
 });
 
@@ -35,55 +45,9 @@ var borderColorArray = ['rgba(255,99,132,1)','rgba(54, 162, 235, 1)','rgba(255, 
 var responseTimeArray = ["Within An Hour", "Within A Few Hours", "Within A Day"];
 
 // Renders all chart elements
-function loadAll(){
+function loadBarGraph1(){
   var bar1 = document.getElementById("barGraph1").getContext('2d');
-  var bar2 = document.getElementById("barGraph2").getContext('2d');
-  var scatter1 = document.getElementById("scatterPlot1").getContext('2d');
   Chart.defaults.global.defaultColor = 'rgba(217, 0, 65,1)';
-  var scatterChart = new Chart(scatter1, {
-    responsive: true,
-    maintainAspectRatio: true,
-    type: 'scatter',
-    data: {
-        datasets: [{
-            // The following line was used during development to call a series of function that return the data used to populate this chart
-            // This data was saved in various arrays in chart_data.js for production to decrease loading time
-            // data: getPointsForHostSince(),
-            data: scatter1Data, //Loads data array from chart_data.js
-            backgroundColor: "rgba(217, 0, 65,1)"
-        }]
-    },
-
-    options: {
-        scales: {
-            xAxes: [{
-                type: 'linear',
-                position: 'bottom',
-                scaleLabel: {
-                  display: true,
-                  labelString: 'Days as AirBnB Host',
-                  fontSize: 15
-                }
-            }],
-            yAxes: [{
-                scaleLabel: {
-                  display: true,
-                  labelString: 'Average Host Score',
-                  fontSize: 15
-                }
-            }]
-        },
-        title: {
-          display: true,
-          text: "Days as Host vs Average Rating",
-          fontSize: 20
-        },
-        legend: {
-            display: false
-        }
-    }
-  });
-
   var barChart = new Chart(bar1, {
     type: 'bar',
     data: {
@@ -128,7 +92,9 @@ function loadAll(){
         }
     }
   });
-
+}
+function loadBarGraph2(){
+  var bar2 = document.getElementById("barGraph2").getContext('2d');
   var barChart = new Chart(bar2, {
     type: 'bar',
     data: {
@@ -166,6 +132,53 @@ function loadAll(){
         title: {
           display: true,
           text: "Response Time vs Average Host Score",
+          fontSize: 20
+        },
+        legend: {
+            display: false
+        }
+    }
+  });
+}
+
+function loadScatter1(){
+  var scatter1 = document.getElementById("scatterPlot1").getContext('2d');
+  var scatterChart = new Chart(scatter1, {
+    responsive: true,
+    maintainAspectRatio: true,
+    type: 'scatter',
+    data: {
+        datasets: [{
+            // The following line was used during development to call a series of function that return the data used to populate this chart
+            // This data was saved in various arrays in chart_data.js for production to decrease loading time
+            // data: getPointsForHostSince(),
+            data: scatter1Data, //Loads data array from chart_data.js
+            backgroundColor: "rgba(217, 0, 65,1)"
+        }]
+    },
+
+    options: {
+        scales: {
+            xAxes: [{
+                type: 'linear',
+                position: 'bottom',
+                scaleLabel: {
+                  display: true,
+                  labelString: 'Days as AirBnB Host',
+                  fontSize: 15
+                }
+            }],
+            yAxes: [{
+                scaleLabel: {
+                  display: true,
+                  labelString: 'Average Host Score',
+                  fontSize: 15
+                }
+            }]
+        },
+        title: {
+          display: true,
+          text: "Days as Host vs Average Rating",
           fontSize: 20
         },
         legend: {
