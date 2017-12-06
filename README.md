@@ -1,4 +1,6 @@
 # Capital One AirBnb Optimization
+*Winning Submission for January 2018 Capital One Software Engineering Summit*
+
 Web app created for a Capital One Code Challenge based on AirBnb Data in San Francisco
 
 **To run locally:**
